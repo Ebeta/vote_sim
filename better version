@@ -1,0 +1,171 @@
+#working verson
+class Game
+	def initialize 
+		main_menu
+	end
+end
+ 
+ 
+class Human
+	attr_accessor :name
+	def initialize(name)
+		@name = name
+	end
+end
+ 
+class Politician < Human
+	attr_accessor :party
+	@@politicians = []
+	def initialize(name, party)
+		super name
+		@party = party
+ 
+		@@politicians << self
+	end
+	def self.all
+		@@politicians
+	end
+	def to_s
+		"#{name}, of the #{party} party."
+	end
+end
+ 
+class Person < Human
+	attr_accessor :party
+	@@people = []
+	def initialize(name, party)
+		super name
+		@party = party
+ 
+		@@people << self
+	end
+	def self.all
+		@@people
+	end
+end
+ 
+ 
+def list
+	puts "politicians or voters"
+	list_choice = gets.chomp
+	case list_choice
+	when "politicians"
+		 Politician.all.each{ |pol| puts pol.name}
+	when "voters"
+		 Person.all.each{ | per| puts per.name }
+	end
+end
+ 
+def update
+	puts "Do you want to update a politician or a voter?"
+	case gets.chomp
+	when "politician"
+		puts "who do you want to update?"
+			name = gets.chomp
+		puts "whats the new name"
+		new_name = gets.chomp
+		puts "what is #{new_name}'s party"
+		new_party = gets.chomp
+		Politician.all.each { |bro| 
+			if name == bro.name?
+				bro.name = new_name
+				bro.party = new_party
+			end }
+	when "voter"
+		puts "who do you want to update?"
+			name = gets.chomp             
+		puts "whats the new name"		
+		new_name = gets.chomp
+		puts "what is #{new_name}'s party"
+		new_party = gets.chomp
+		Person.all.each { |bro| 
+			if name == bro.name 
+				bro.name = new_name
+				bro.party = new_party
+			end }
+		main_menu
+	end
+end
+ 
+def election
+	republican = 0                 
+	democrat = 0
+	Person.all.each {|dude| 
+		case  dude.party  
+	    when "tea party"
+		republican += 1.0 
+	    when "conservative"
+		republican += 1.0
+	    when "neutral"
+	    	republican += 0.5
+	    	democrat += 0.5
+	    when "liberal"
+	    	democrat += 1.0
+	    when "socialist"
+	    	democrat += 1.0
+	    end 
+}
+	if republican > democrat
+		puts "#{the_republican} wins!"
+	else
+		puts "#{the_democrat} wins!"
+	end
+end
+def the_republican
+	Politician.all.each{ |guy | if guy.party == "republican"
+		return guy.name
+	end 
+}
+end
+ 
+def the_democrat
+	Politician.all.each{ |guy|  if guy.party == "democrat"
+		return guy.name
+	end 
+}
+end
+ 
+def create_individual
+	puts "politician or person"
+	case gets.chomp
+	when "politician"
+		puts "Name?"
+		name = gets.chomp
+		puts "what party does #{name} belong to Democrat or Republican?"
+		party = gets.chomp.downcase
+		Politician.new(name, party)
+	when "person"
+		puts "Name?"
+		name = gets.chomp
+		puts "what party does #{name} associate with, Tea party, Conservative, Neutral, Liberal, Socialist?"
+		party = gets.chomp
+		Person.new(name, party)
+	end
+end
+ 
+def main_menu
+	puts "What would you like to do? Create, List, Update, Vote"
+	case gets.chomp.downcase
+	when "create"
+		create_individual
+		main_menu
+	when "list"
+		list
+		main_menu
+	when "test"
+		Politician.new("Brian", "republican")
+		Person.new("Meg", "socialist")
+		Person.new("Stewie" , "tea party")
+		Person.new("Chris" , "conservative")
+		Politician.new("Petter","democrat")
+		main_menu
+	when "update"
+		update
+		main_menu
+	when "vote"
+		election
+		main_menu
+	end
+end
+start = Game.new
+
